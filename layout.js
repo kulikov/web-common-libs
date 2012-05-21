@@ -48,7 +48,9 @@
           });
         }
         if (this._layoutView.$el.data('layout-id') === this.id) {
-          callback(this._layoutView);
+          if (typeof callback === "function") {
+            callback(this._layoutView);
+          }
           return;
         }
         this._layoutView.$el.data('layout-id', this.id);

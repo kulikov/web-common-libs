@@ -11,7 +11,12 @@
       "lower": function(text) {
         return text.toLowerCase();
       },
-      "md5": md5
+      "md5": md5,
+      "date": function(time) {
+        var d;
+        d = new Date(time);
+        return d.getDate() + "." + d.getMonth() + "." + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes();
+      }
     });
     Templater = (function() {
 
