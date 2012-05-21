@@ -9,7 +9,7 @@ define [
     "upper": (text) -> text.toUpperCase()
     "lower": (text) -> text.toLowerCase()
     "md5": md5
-	"date": (time) ->
+    "date": (time) ->
       d = new Date(time)
       d.getDate() + "." + d.getMonth() + "." + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes()
 
