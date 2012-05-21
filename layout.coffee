@@ -39,7 +39,7 @@ define [
 
       # чтобы не рендерить лишний раз
       if @_layoutView.$el.data('layout-id') == @id
-        callback @_layoutView
+        callback? @_layoutView
         return
 
       @_layoutView.$el.data 'layout-id', @id
