@@ -48,14 +48,15 @@
     Backbone.Collection.prototype.lazyFetch = function(callback) {
       if (this.models.length) {
         if (callback) {
-          return callback();
+          callback();
         }
       } else {
-        return this.fetch({
+        this.fetch({
           success: callback,
           silent: true
         });
       }
+      return this;
     };
     Application = (function() {
 
