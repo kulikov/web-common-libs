@@ -48,6 +48,7 @@ define [
       callback() if callback
     else
       @fetch { success: callback, silent: true }
+    @
 
 
 
