@@ -95,12 +95,16 @@
                 var collection, _render;
                 collection = _this.app.collection(_collectParams.module.Collections[_collectParams.name]);
                 _render = function() {
-                  var _options;
+                  var _options, _select;
                   _options = ['<option/>'];
                   collection.each(function(item) {
                     return _options.push("<option value='" + (item.get('id')) + "'>" + (item.get('fullName') || item.get('name')) + "</option>");
                   });
-                  return $('#' + _uniqId).html(_options.join("")).chosen();
+                  _select = $('#' + _uniqId).html(_options.join(""));
+                  if (params.value) {
+                    _select.find("option[value=" + params.value + "]").attr("selected", true);
+                  }
+                  return _select.chosen();
                 };
                 return collection.lazyFetch(_render);
               });

@@ -67,7 +67,7 @@ define [
 
 
         #
-        # Выпадайка
+        # Выпадайка chosen
         #
         chosen: (chunk, context, bodies, params) =>
           _uniqId = _.uniqueId 'wchosen_'
@@ -85,7 +85,12 @@ define [
                 collection.each (item) ->
                   _options.push "<option value='#{ item.get('id') }'>#{ item.get('fullName') || item.get('name') }</option>"
 
-                $('#' + _uniqId).html(_options.join "").chosen()
+                _select = $('#' + _uniqId).html(_options.join "")
+
+                if params.value
+                  _select.find("option[value=#{params.value}]").attr("selected", true)
+
+                _select.chosen()
 
               collection.lazyFetch _render
 
