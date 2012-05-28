@@ -112,7 +112,13 @@ define [
 
         if href and href.slice(0, protocol.length) != protocol and href.indexOf("javascript:") != 0
           evt.preventDefault()
-          _app.Backbone.history.navigate href, true
+          _app.Backbone.history.navigate href, false
+          _app.Backbone.history.loadUrl href
+
+
+    # алиас для перехода на новый урл
+    navigate: (href, options) ->
+      @Backbone.history.navigate(href, options)
 
 
     # подгружаем и инициализируем все модули

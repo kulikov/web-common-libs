@@ -133,9 +133,14 @@
           protocol = this.protocol + "//";
           if (href && href.slice(0, protocol.length) !== protocol && href.indexOf("javascript:") !== 0) {
             evt.preventDefault();
-            return _app.Backbone.history.navigate(href, true);
+            _app.Backbone.history.navigate(href, false);
+            return _app.Backbone.history.loadUrl(href);
           }
         });
+      };
+
+      Application.prototype.navigate = function(href, options) {
+        return this.Backbone.history.navigate(href, options);
       };
 
       Application.prototype.initModules = function(modules) {

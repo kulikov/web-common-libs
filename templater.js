@@ -67,7 +67,8 @@
               throw new TypeError("Undefined widget name!");
             }
             _viewParams = _this._parseClassPath(params.view);
-            _callback = function() {
+            _callback = function(context) {
+              params.context = context;
               return require(_viewParams.deps, function() {
                 var view;
                 params.el = '#' + _uniqId;

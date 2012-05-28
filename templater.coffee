@@ -51,7 +51,8 @@ define [
 
           _viewParams = @_parseClassPath params.view
 
-          _callback = =>
+          _callback = (context) =>
+            params.context = context
             require _viewParams.deps, =>
               params.el = '#' + _uniqId
               view = @app.view _viewParams.module.Views[_viewParams.name], params
