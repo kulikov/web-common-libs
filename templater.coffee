@@ -55,7 +55,7 @@ define [
             params.context = context
             require _viewParams.deps, =>
               params.el = '#' + _uniqId
-              view = @app.view _viewParams.module.Views[_viewParams.name], params
+              view = new _viewParams.module.Views[_viewParams.name](params)
               view.name = _uniqId
               view.setElement('#' + _uniqId)
               view.render()

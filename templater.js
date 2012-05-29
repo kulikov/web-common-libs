@@ -72,7 +72,7 @@
               return require(_viewParams.deps, function() {
                 var view;
                 params.el = '#' + _uniqId;
-                view = _this.app.view(_viewParams.module.Views[_viewParams.name], params);
+                view = new _viewParams.module.Views[_viewParams.name](params);
                 view.name = _uniqId;
                 view.setElement('#' + _uniqId);
                 return view.render();

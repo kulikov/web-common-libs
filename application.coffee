@@ -84,7 +84,7 @@ define [
 
     # кеш для вьюшек
     view: (view, options) ->
-      view.__instance ?= new view options
+      view.__instance ?= new view(options)
       view.__instance._configure(options) if options
       view.__instance
 
