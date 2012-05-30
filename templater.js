@@ -60,27 +60,39 @@
         var _this = this;
         return dust.makeBase({
           block: function(chunk, context, bodies, params) {
-            var _callback, _uniqId, _viewParams;
+            var _callback, _module, _uniqId, _viewParams;
             _uniqId = _.uniqueId('wblock_');
             chunk.write("<div id='" + _uniqId + "'></div>");
             if (!params.view) {
               throw new TypeError("Undefined widget name!");
             }
             _viewParams = _this._parseClassPath(params.view);
-            _callback = function(context) {
-              params.context = context;
+            _module = _viewParams.module;
+            _callback = function(triggerContext) {
+              var _v;
+              params.el = $('#' + _uniqId);
+              params.context = triggerContext;
+              if ((_v = params.el.data("view"))) {
+                console.log("silent render");
+                _v._configure(params);
+                _v.setElement('#' + _uniqId);
+                _v.render({
+                  silent: true
+                });
+                return;
+              }
               return require(_viewParams.deps, function() {
                 var view;
-                params.el = '#' + _uniqId;
-                view = new _viewParams.module.Views[_viewParams.name](params);
+                view = new _module.Views[_viewParams.name](params);
                 view.name = _uniqId;
                 view.setElement('#' + _uniqId);
-                return view.render();
+                view.render();
+                return params.el.data("view", view);
               });
             };
             if (params.on) {
-              _viewParams.module.off(params.on);
-              return _viewParams.module.on(params.on, _callback);
+              _module.off(params.on);
+              return _module.on(params.on, _callback);
             } else {
               return _.defer(_callback);
             }

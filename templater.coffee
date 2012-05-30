@@ -50,19 +50,30 @@ define [
             throw new TypeError "Undefined widget name!"
 
           _viewParams = @_parseClassPath params.view
+          _module = _viewParams.module
 
-          _callback = (context) =>
-            params.context = context
+          _callback = (triggerContext) =>
+            params.el = $('#' + _uniqId)
+            params.context = triggerContext
+
+            if (_v = params.el.data("view"))
+              console.log "silent render"
+              _v._configure(params)
+              _v.setElement('#' + _uniqId)
+              _v.render silent: true
+              return
+
             require _viewParams.deps, =>
-              params.el = '#' + _uniqId
-              view = new _viewParams.module.Views[_viewParams.name](params)
+              view = new _module.Views[_viewParams.name](params)
               view.name = _uniqId
               view.setElement('#' + _uniqId)
               view.render()
+              params.el.data("view", view)
+
 
           if params.on
-            _viewParams.module.off params.on
-            _viewParams.module.on params.on, _callback
+            _module.off params.on
+            _module.on params.on, _callback
           else
             _.defer _callback
 
