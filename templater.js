@@ -73,7 +73,6 @@
               params.el = $('#' + _uniqId);
               params.context = triggerContext;
               if ((_v = params.el.data("view"))) {
-                console.log("silent render");
                 _v._configure(params);
                 _v.setElement('#' + _uniqId);
                 _v.render({
