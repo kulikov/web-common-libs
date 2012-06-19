@@ -14,6 +14,12 @@ define [
       d.getDate() + "." + d.getMonth() + "." + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes()
 
 
+  # подгружаем шаблоны из файлов
+  dust.onLoad = (tmplPath, callback) ->
+    require ["text!" + tmplPath], (tplString) ->
+      callback null, tplString
+
+
   class Templater
 
     baseContext: null
@@ -25,15 +31,9 @@ define [
       if _.isFunction(context) && !callback
         [callback, context] = [context, {}]
 
-      if dust.cache[tmplPath]?
-        dust.render tmplPath, @baseContext.push(context), (err, output) ->
-          console.log err if err
-          callback output, err
-      else
-        require ["text!" + tmplPath], (tpl) =>
-          dust.loadSource dust.compile(tpl, tmplPath)
-          # компилим и сохраняем
-          @render tmplPath, context, callback # рендерим
+      dust.render tmplPath, @baseContext.push(context), (err, output) ->
+        console.log err if err
+        callback output, err
 
 
     _buildBaseContext: =>

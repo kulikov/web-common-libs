@@ -18,6 +18,11 @@
         return d.getDate() + "." + d.getMonth() + "." + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes();
       }
     });
+    dust.onLoad = function(tmplPath, callback) {
+      return require(["text!" + tmplPath], function(tplString) {
+        return callback(null, tplString);
+      });
+    };
     Templater = (function() {
 
       Templater.name = 'Templater';
@@ -36,24 +41,16 @@
       }
 
       Templater.prototype.render = function(tmplPath, context, callback) {
-        var _ref,
-          _this = this;
+        var _ref;
         if (_.isFunction(context) && !callback) {
           _ref = [context, {}], callback = _ref[0], context = _ref[1];
         }
-        if (dust.cache[tmplPath] != null) {
-          return dust.render(tmplPath, this.baseContext.push(context), function(err, output) {
-            if (err) {
-              console.log(err);
-            }
-            return callback(output, err);
-          });
-        } else {
-          return require(["text!" + tmplPath], function(tpl) {
-            dust.loadSource(dust.compile(tpl, tmplPath));
-            return _this.render(tmplPath, context, callback);
-          });
-        }
+        return dust.render(tmplPath, this.baseContext.push(context), function(err, output) {
+          if (err) {
+            console.log(err);
+          }
+          return callback(output, err);
+        });
       };
 
       Templater.prototype._buildBaseContext = function() {
