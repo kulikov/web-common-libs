@@ -29,10 +29,6 @@ define [
 
 
 
-
-
-
-
   # Расширяем модель бекбона
   # Позволяет переопределять проперти модели одноименным методом
   previousGet = Backbone.Model.prototype.get
@@ -49,8 +45,6 @@ define [
     else
       @fetch { success: callback, silent: true }
     @
-
-
 
 
   # Приложение
@@ -107,11 +101,14 @@ define [
 
       _app = @
       $(document).on "click", "a:not([data-bypass])", (evt) ->
-        href = $(@).attr "href"
-        protocol = @protocol + "//"
+        href = $(@).prop "href"
+        root = location.protocol + "//" + location.host
 
-        if href and href.slice(0, protocol.length) != protocol and href.indexOf("javascript:") != 0
+        # проверяем что ссылка ведет на наш сайт (домен и протокол)
+        if href and href.indexOf(root) == 0
           evt.preventDefault()
+
+          href = href.slice root.length
           _app.Backbone.history.navigate href, false
           _app.Backbone.history.loadUrl href
 
