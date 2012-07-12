@@ -132,6 +132,7 @@
           if (href && href.indexOf(root) === 0) {
             evt.preventDefault();
             href = href.slice(root.length);
+            href = href.replace(/[/# ]*$/g, '');
             _app.Backbone.history.navigate(href, false);
             return _app.Backbone.history.loadUrl(href);
           }

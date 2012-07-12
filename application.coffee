@@ -109,6 +109,7 @@ define [
           evt.preventDefault()
 
           href = href.slice root.length
+          href = href.replace /[/# ]*$/g, '' # rtrim / # and spaces
           _app.Backbone.history.navigate href, false
           _app.Backbone.history.loadUrl href
 
