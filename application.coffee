@@ -47,7 +47,10 @@ define [
     @
 
 
+
+  #
   # Приложение
+  #
   class Application
 
     layoutClass: null
