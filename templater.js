@@ -110,6 +110,7 @@
                   _select = $('#' + _uniqId).html(_options.join(""));
                   if (params.value) {
                     _select.find("option[value=" + params.value + "]").attr("selected", true);
+                    $('#' + _uniqId).trigger('change');
                   }
                   return _select.chosen();
                 };

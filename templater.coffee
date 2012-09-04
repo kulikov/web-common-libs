@@ -69,7 +69,6 @@ define [
               view.render()
               params.el.data("view", view)
 
-
           if params.on
             _module.off params.on
             _module.on params.on, _callback
@@ -95,11 +94,12 @@ define [
                 _options = ['<option/>']
                 collection.each (item) ->
                   _options.push "<option value='#{ item.get('id') }'>#{ item.get('fullName') || item.get('name') }</option>"
-
                 _select = $('#' + _uniqId).html(_options.join "")
 
                 if params.value
                   _select.find("option[value=#{params.value}]").attr("selected", true)
+                  $('#' + _uniqId).trigger 'change'
+
 
                 _select.chosen()
 
