@@ -3,7 +3,14 @@
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   define(["use!underscore", "use!dust", "use!md5"], function(_, dust, md5) {
-    var Templater;
+    var Templater, _round;
+    _round = function(n) {
+      if (n < 10) {
+        return "0" + n;
+      } else {
+        return n;
+      }
+    };
     _.extend(dust.filters, {
       "upper": function(text) {
         return text.toUpperCase();
@@ -15,7 +22,12 @@
       "date": function(time) {
         var d;
         d = new Date(time);
-        return d.getDate() + "." + d.getMonth() + "." + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes();
+        return _round(d.getDate()) + "." + _round(d.getMonth()) + "." + d.getFullYear() + " " + _round(d.getHours()) + ":" + _round(d.getMinutes());
+      },
+      "time": function(time) {
+        var d;
+        d = new Date(time);
+        return _round(d.getHours()) + ":" + _round(d.getMinutes());
       }
     });
     dust.onLoad = function(tmplPath, callback) {

@@ -4,14 +4,22 @@ define [
   "use!md5"
 ], (_, dust, md5) ->
 
+  _round = (n) ->
+    if n < 10 then "0" + n else n
+
   # Кастомные фильтры
   _.extend dust.filters,
     "upper": (text) -> text.toUpperCase()
     "lower": (text) -> text.toLowerCase()
     "md5": md5
+
     "date": (time) ->
       d = new Date(time)
-      d.getDate() + "." + d.getMonth() + "." + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes()
+      _round(d.getDate()) + "." + _round(d.getMonth()) + "." + d.getFullYear() + " " + _round(d.getHours()) + ":" + _round(d.getMinutes())
+
+    "time": (time) ->
+      d = new Date(time)
+      _round(d.getHours()) + ":" + _round(d.getMinutes())
 
 
   # подгружаем шаблоны из файлов
