@@ -70,7 +70,7 @@ define [
       @_options[name]
 
 
-  _.extend Ecomet::, Backbone.Events
+  _.extend Ecomet.prototype, Backbone.Events
 
 
   class SockJSAdapter
@@ -95,8 +95,6 @@ define [
         @_checkSendBuffer()
         @ecomet.trigger 'ecomet.connect'
 
-        console.log "eComet open"
-
         # при успешном длительном коннекте сбрасываем счетчик ошибок
         @_disconnectTimeout = setTimeout ( => @_disconnectCnt = 0), 10000
 
@@ -105,17 +103,12 @@ define [
       @_client.onmessage = (event) =>
         _data = JSON.parse event.data
 
-        console.log "eComet message", _data
-
         @ecomet.trigger 'ecomet.message.' + _data.event, _data.message
 
 
       # отключение
       @_client.onclose = =>
         @ecomet.trigger 'ecomet.disconnect'
-
-        console.log "eComet closed"
-
         @_client = null
         @_reconnect()
 

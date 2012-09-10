@@ -124,7 +124,6 @@
         this._client.onopen = function() {
           _this._checkSendBuffer();
           _this.ecomet.trigger('ecomet.connect');
-          console.log("eComet open");
           return _this._disconnectTimeout = setTimeout((function() {
             return _this._disconnectCnt = 0;
           }), 10000);
@@ -132,12 +131,10 @@
         this._client.onmessage = function(event) {
           var _data;
           _data = JSON.parse(event.data);
-          console.log("eComet message", _data);
           return _this.ecomet.trigger('ecomet.message.' + _data.event, _data.message);
         };
         return this._client.onclose = function() {
           _this.ecomet.trigger('ecomet.disconnect');
-          console.log("eComet closed");
           _this._client = null;
           return _this._reconnect();
         };
