@@ -89,7 +89,7 @@ define [
         #
         chosen: (chunk, context, bodies, params) =>
           _uniqId = _.uniqueId 'wchosen_'
-          chunk.write "<select id='#{ _uniqId }' name='#{ params.name }' data-placeholder='#{ params.placeholder ? '' }'></select>"
+          chunk.write "<select id='#{_uniqId}' name='#{params.name}' data-placeholder='#{params.placeholder ? ''}'><option value='#{params.selected}' selected='true'/></select>"
 
           _collectParams = @_parseClassPath params.collection
 
@@ -104,10 +104,8 @@ define [
                   _options.push "<option value='#{ item.get('id') }'>#{ item.get('fullName') || item.get('name') }</option>"
                 _select = $('#' + _uniqId).html(_options.join "")
 
-                if params.value
-                  _select.find("option[value=#{params.value}]").attr("selected", true)
-                  $('#' + _uniqId).trigger 'change'
-
+                if params.selected
+                  _select.find("option[value=#{params.selected}]").attr("selected", true)
 
                 _select.chosen()
 

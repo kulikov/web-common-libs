@@ -106,7 +106,7 @@
           chosen: function(chunk, context, bodies, params) {
             var _callback, _collectParams, _ref, _uniqId;
             _uniqId = _.uniqueId('wchosen_');
-            chunk.write("<select id='" + _uniqId + "' name='" + params.name + "' data-placeholder='" + ((_ref = params.placeholder) != null ? _ref : '') + "'></select>");
+            chunk.write("<select id='" + _uniqId + "' name='" + params.name + "' data-placeholder='" + ((_ref = params.placeholder) != null ? _ref : '') + "'><option value='" + params.selected + "' selected='true'/></select>");
             _collectParams = _this._parseClassPath(params.collection);
             _callback = function() {
               _collectParams.deps.push("use!chosen");
@@ -120,9 +120,8 @@
                     return _options.push("<option value='" + (item.get('id')) + "'>" + (item.get('fullName') || item.get('name')) + "</option>");
                   });
                   _select = $('#' + _uniqId).html(_options.join(""));
-                  if (params.value) {
-                    _select.find("option[value=" + params.value + "]").attr("selected", true);
-                    $('#' + _uniqId).trigger('change');
+                  if (params.selected) {
+                    _select.find("option[value=" + params.selected + "]").attr("selected", true);
                   }
                   return _select.chosen();
                 };
