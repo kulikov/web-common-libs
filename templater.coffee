@@ -89,7 +89,7 @@ define [
         #
         chosen: (chunk, context, bodies, params) =>
           _uniqId = _.uniqueId 'wchosen_'
-          chunk.write "<select id='#{_uniqId}' name='#{params.name}' data-placeholder='#{params.placeholder ? ''}'><option value='#{params.selected}' selected='true'/></select>"
+          chunk.write "<select id='#{_uniqId}' name='#{params.name}' data-placeholder='#{params.placeholder ? ''}'><option value='#{params.selected || ''}' selected='true'/></select>"
 
           _collectParams = @_parseClassPath params.collection
 

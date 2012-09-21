@@ -106,7 +106,7 @@
           chosen: function(chunk, context, bodies, params) {
             var _callback, _collectParams, _ref, _uniqId;
             _uniqId = _.uniqueId('wchosen_');
-            chunk.write("<select id='" + _uniqId + "' name='" + params.name + "' data-placeholder='" + ((_ref = params.placeholder) != null ? _ref : '') + "'><option value='" + params.selected + "' selected='true'/></select>");
+            chunk.write("<select id='" + _uniqId + "' name='" + params.name + "' data-placeholder='" + ((_ref = params.placeholder) != null ? _ref : '') + "'><option value='" + (params.selected || '') + "' selected='true'/></select>");
             _collectParams = _this._parseClassPath(params.collection);
             _callback = function() {
               _collectParams.deps.push("use!chosen");
