@@ -78,6 +78,9 @@
             _callback = function(triggerContext) {
               var _v;
               params.el = $('#' + _uniqId);
+              if (params["class"]) {
+                $('#' + _uniqId).addClass(params["class"]);
+              }
               params.context = triggerContext;
               if ((_v = params.el.data("view"))) {
                 _v._configure(params);
@@ -104,10 +107,17 @@
             }
           },
           chosen: function(chunk, context, bodies, params) {
-            var _callback, _collectParams, _ref, _uniqId;
+            var _callback, _collectParams, _collectionFiltered, _ref, _uniqId;
             _uniqId = _.uniqueId('wchosen_');
             chunk.write("<select id='" + _uniqId + "' name='" + params.name + "' data-placeholder='" + ((_ref = params.placeholder) != null ? _ref : '') + "'><option value='" + (params.selected || '') + "' selected='true'/></select>");
             _collectParams = _this._parseClassPath(params.collection);
+            _collectionFiltered = function(collection) {
+              if (params != null ? params.filter : void 0) {
+                return _(collection.filter(params != null ? params.filter : void 0));
+              } else {
+                return collection;
+              }
+            };
             _callback = function() {
               _collectParams.deps.push("use!chosen");
               return require(_collectParams.deps, function() {
@@ -116,7 +126,7 @@
                 _render = function() {
                   var _options, _select;
                   _options = ['<option/>'];
-                  collection.each(function(item) {
+                  _collectionFiltered(collection).each(function(item) {
                     return _options.push("<option value='" + (item.get('id')) + "'>" + (item.get('fullName') || item.get('name')) + "</option>");
                   });
                   _select = $('#' + _uniqId).html(_options.join(""));

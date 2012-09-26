@@ -62,6 +62,8 @@ define [
 
           _callback = (triggerContext) =>
             params.el = $('#' + _uniqId)
+            if params.class
+              $('#' + _uniqId).addClass( params.class )
             params.context = triggerContext
 
             if (_v = params.el.data("view"))
@@ -93,6 +95,12 @@ define [
 
           _collectParams = @_parseClassPath params.collection
 
+          _collectionFiltered = (collection) =>
+            if params?.filter
+              _(collection.filter(params?.filter))
+            else
+              collection
+
           _callback = =>
             _collectParams.deps.push "use!chosen"
             require _collectParams.deps, =>
@@ -100,7 +108,7 @@ define [
 
               _render = ->
                 _options = ['<option/>']
-                collection.each (item) ->
+                _collectionFiltered(collection).each (item) ->
                   _options.push "<option value='#{ item.get('id') }'>#{ item.get('fullName') || item.get('name') }</option>"
                 _select = $('#' + _uniqId).html(_options.join "")
 
