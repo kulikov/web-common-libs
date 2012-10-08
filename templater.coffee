@@ -62,8 +62,10 @@ define [
 
           _callback = (triggerContext) =>
             params.el = $('#' + _uniqId)
+
             if params.class
-              $('#' + _uniqId).addClass( params.class )
+              $('#' + _uniqId).addClass(params.class)
+
             params.context = triggerContext
 
             if (_v = params.el.data("view"))
