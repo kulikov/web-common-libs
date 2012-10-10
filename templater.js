@@ -107,9 +107,9 @@
             }
           },
           chosen: function(chunk, context, bodies, params) {
-            var _callback, _collectParams, _collectionFiltered, _ref, _uniqId;
+            var _callback, _collectParams, _collectionFiltered, _ref, _ref1, _ref2, _ref3, _uniqId;
             _uniqId = _.uniqueId('wchosen_');
-            chunk.write("<select id='" + _uniqId + "' name='" + params.name + "' data-placeholder='" + ((_ref = params.placeholder) != null ? _ref : '') + "'><option value='" + (params.selected || '') + "' selected='true'/></select>");
+            chunk.write("<select id='" + _uniqId + "' name='" + ((_ref = params.name) != null ? _ref : '') + "' style='" + ((_ref1 = params.style) != null ? _ref1 : '') + "'  data-placeholder='" + ((_ref2 = params.placeholder) != null ? _ref2 : '') + "' " + ((_ref3 = params.attr) != null ? _ref3 : '') + "><option value='" + (params.selected || '') + "' selected='true'/></select>");
             _collectParams = _this._parseClassPath(params.collection);
             _collectionFiltered = function(collection) {
               if (params != null ? params.filter : void 0) {
@@ -131,7 +131,7 @@
                   });
                   _select = $('#' + _uniqId).html(_options.join(""));
                   if (params.selected) {
-                    _select.find("option[value=" + params.selected + "]").attr("selected", true);
+                    _select.find("option[value=" + (params.selected.push ? params.selected : [params.selected]).join("], option[value=") + "]").attr("selected", true);
                   }
                   return _select.chosen();
                 };
