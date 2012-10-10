@@ -125,12 +125,15 @@
         var _app;
         new (this.Backbone.Router.extend(routerParams));
         _app = this;
-        return $(document).on("click", "a:not([data-bypass])", function(evt) {
+        return $(document).on("click", "a:not([data-bypass])", function(e) {
           var href, root;
+          if (e.ctrlKey || e.metaKey) {
+            return;
+          }
           href = $(this).prop("href");
           root = location.protocol + "//" + location.host;
           if (href && href.indexOf(root) === 0) {
-            evt.preventDefault();
+            e.preventDefault();
             href = href.slice(root.length);
             href = href.replace(/[/# ]*$/g, '');
             _app.Backbone.history.navigate(href, false);

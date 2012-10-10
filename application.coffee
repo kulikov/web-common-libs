@@ -103,13 +103,15 @@ define [
       new (@Backbone.Router.extend routerParams)
 
       _app = @
-      $(document).on "click", "a:not([data-bypass])", (evt) ->
+      $(document).on "click", "a:not([data-bypass])", (e) ->
+        return if e.ctrlKey || e.metaKey # ctrl+click открываем в новом окне
+
         href = $(@).prop "href"
         root = location.protocol + "//" + location.host
 
         # проверяем что ссылка ведет на наш сайт (домен и протокол)
         if href and href.indexOf(root) == 0
-          evt.preventDefault()
+          e.preventDefault()
 
           href = href.slice root.length
           href = href.replace /[/# ]*$/g, '' # rtrim / # and spaces
