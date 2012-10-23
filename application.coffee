@@ -63,6 +63,8 @@ define [
     _modules: null
     _configs: null
     _currentModule: null
+    _ecometConnection: null
+    _ecometSubscriptions: {}
 
     constructor: (options = {}) ->
       @_configs = {}
@@ -96,6 +98,26 @@ define [
 
       if _.isObject config
         _.extend @_configs, config
+
+    #
+    # Connect to ecomet if not connected
+    # Call callback only one times
+    #
+    ecometSingle: (name, callback) ->
+      callSubs = (ecomet) =>
+        if not @_ecometSubscriptions[name]?
+          @_ecometSubscriptions[name] = true
+          callback(ecomet)
+
+      if not @_ecometConnection
+        require ["system/libs/ecomet"], (Ecomet) =>
+          if not @_ecometConnection
+            @_ecometConnection = Ecomet.connect
+              host:    @config('ecomet.host')
+              authUrl: @config('api.url') + (@config('ecomet.authUrl') || '/auth/ecomet')
+          callSubs(@_ecometConnection)
+      else
+        callSubs(@_ecometConnection)
 
 
     # начальная инициализация приложения — вешаем обработчик переходов по ссылкам

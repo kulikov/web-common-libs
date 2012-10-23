@@ -72,6 +72,10 @@
 
       Application.prototype._currentModule = null;
 
+      Application.prototype._ecometConnection = null;
+
+      Application.prototype._ecometSubscriptions = {};
+
       function Application(options) {
         if (options == null) {
           options = {};
@@ -118,6 +122,30 @@
         }
         if (_.isObject(config)) {
           return _.extend(this._configs, config);
+        }
+      };
+
+      Application.prototype.ecometSingle = function(name, callback) {
+        var callSubs,
+          _this = this;
+        callSubs = function(ecomet) {
+          if (!(_this._ecometSubscriptions[name] != null)) {
+            _this._ecometSubscriptions[name] = true;
+            return callback(ecomet);
+          }
+        };
+        if (!this._ecometConnection) {
+          return require(["system/libs/ecomet"], function(Ecomet) {
+            if (!_this._ecometConnection) {
+              _this._ecometConnection = Ecomet.connect({
+                host: _this.config('ecomet.host'),
+                authUrl: _this.config('api.url') + (_this.config('ecomet.authUrl') || '/auth/ecomet')
+              });
+            }
+            return callSubs(_this._ecometConnection);
+          });
+        } else {
+          return callSubs(this._ecometConnection);
         }
       };
 
