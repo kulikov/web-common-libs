@@ -158,6 +158,10 @@
           if (e.ctrlKey || e.metaKey) {
             return;
           }
+          if ($(this).attr("href") === "") {
+            e.preventDefault();
+            return false;
+          }
           href = $(this).prop("href");
           root = location.protocol + "//" + location.host;
           if (href && href.indexOf(root) === 0) {

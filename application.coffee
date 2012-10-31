@@ -128,6 +128,10 @@ define [
       $(document).on "click", "a:not([data-bypass])", (e) ->
         return if e.ctrlKey || e.metaKey # ctrl+click открываем в новом окне
 
+        if $(@).attr("href") == ""
+          e.preventDefault() # если href у ссылки вобще не задан - скоре всего это ошибка, игнорируем
+          return false
+
         href = $(@).prop "href"
         root = location.protocol + "//" + location.host
 
