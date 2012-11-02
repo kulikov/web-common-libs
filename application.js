@@ -158,7 +158,7 @@
           if (e.ctrlKey || e.metaKey) {
             return;
           }
-          if ($(this).attr("href") === "") {
+          if ($(this).attr("href") === "" || $(this).attr("href") === "#") {
             e.preventDefault();
             return false;
           }
