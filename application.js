@@ -93,20 +93,23 @@
         return this._templater.render(tmplPath, context, callback);
       };
 
-      Application.prototype.collection = function(collection, params) {
+      Application.prototype.collection = function(collectionClass, params) {
         var _ref;
-        return (_ref = collection.__instance) != null ? _ref : collection.__instance = new collection(params);
+        return (_ref = collectionClass.__instance) != null ? _ref : collectionClass.__instance = new collectionClass(params);
       };
 
-      Application.prototype.view = function(view, options) {
+      Application.prototype.view = function(viewClass, options) {
         var _ref;
-        if ((_ref = view.__instance) == null) {
-          view.__instance = new view(options);
+        if (viewClass.__instance) {
+          viewClass.__instance._configure(options);
+          viewClass.__instance._ensureElement();
+          viewClass.__instance.delegateEvents();
+        } else {
+          if ((_ref = viewClass.__instance) == null) {
+            viewClass.__instance = new viewClass(options);
+          }
         }
-        if (options) {
-          view.__instance._configure(options);
-        }
-        return view.__instance;
+        return viewClass.__instance;
       };
 
       Application.prototype.currentModule = function(module) {

@@ -78,14 +78,19 @@ define [
       @_templater.render tmplPath, context, callback
 
     # кеш для коллекций
-    collection: (collection, params) ->
-      collection.__instance ?= new collection params
+    collection: (collectionClass, params) ->
+      collectionClass.__instance ?= new collectionClass params
 
     # кеш для вьюшек
-    view: (view, options) ->
-      view.__instance ?= new view(options)
-      view.__instance._configure(options) if options
-      view.__instance
+    view: (viewClass, options) ->
+      if viewClass.__instance
+        viewClass.__instance._configure(options)
+        viewClass.__instance._ensureElement()
+        viewClass.__instance.delegateEvents()
+      else
+        viewClass.__instance ?= new viewClass(options)
+
+      viewClass.__instance
 
     # текущий активный модуль
     currentModule: (module) ->
