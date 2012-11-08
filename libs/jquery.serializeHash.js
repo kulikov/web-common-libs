@@ -36,30 +36,22 @@
       obj[n] = obj[n] === undefined ? v : ($.isArray(obj[n]) ? obj[n].concat(v) : [obj[n], v]);
     };
 
+    var _expandKeys = function(hash, nlist, v) {
+      var n = _trim(nlist[0]);
+      if (nlist.length == 1) {
+        _merge(hash, n, v);
+      } else {
+        hash[n] !== undefined || (hash[n] = {});
+        _expandKeys(hash[n], nlist.slice(1), v);
+      }
+    };
+
     var _hash = {}, _array = this.serializeArray();
     $.each(_array.length ? _array : $(':input', this).serializeArray(), function (i, el) {
       if (options.skipEmpty && el.value === "") return; // skip
-      _merge(_hash, _trim(el.name), el.value);
+      _expandKeys(_hash, _trim(el.name).split("["), el.value);
     });
 
-    if (options.recursive) {
-      var _expandKeys = function(hash, nlist, v) {
-        var n = _trim(nlist[0]);
-        if (nlist.length == 1) {
-          _merge(hash, n, v);
-        } else {
-          hash[n] !== undefined || (hash[n] = {});
-          _expandKeys(hash[n], nlist.slice(1), v);
-        }
-      };
-
-      var _newHash = {};
-      $.each(_hash, function(n, v) {
-        _expandKeys(_newHash, n.split("["), v);
-      });
-
-      return _newHash;
-    }
     return _hash;
   };
 
