@@ -28,6 +28,9 @@
         var d;
         d = new Date(time);
         return _round(d.getHours()) + ":" + _round(d.getMinutes());
+      },
+      "dump": function(obj) {
+        return JSON.stringify(obj);
       }
     });
     dust.onLoad = function(tmplPath, callback) {

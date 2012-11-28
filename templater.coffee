@@ -21,6 +21,8 @@ define [
       d = new Date(time)
       _round(d.getHours()) + ":" + _round(d.getMinutes())
 
+    "dump": (obj) -> JSON.stringify(obj)
+
 
   # подгружаем шаблоны из файлов
   dust.onLoad = (tmplPath, callback) ->
