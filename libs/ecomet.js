@@ -10,7 +10,8 @@
         port: '',
         authUrl: '/auth',
         bufferTime: 1000,
-        maxErrorReconnect: 4
+        maxErrorReconnect: 4,
+        tryReconnectTimeout: 10000
       };
 
       Ecomet.prototype._subsBuffer = [];
@@ -146,6 +147,7 @@
       };
 
       SockJSAdapter.prototype._reconnect = function() {
+        var _this = this;
         if (!this._isError && this.ecomet._allSubscriptions) {
           clearTimeout(this._disconnectTimeout);
           this._disconnectCnt += 1;
@@ -153,6 +155,10 @@
           if (this._disconnectCnt >= this.ecomet._opt('maxErrorReconnect')) {
             this.ecomet.trigger('ecomet.connection.error');
             this._isError = true;
+            setTimeout((function() {
+              _this._isError = false;
+              return _this._reconnect();
+            }), this.ecomet._opt('tryReconnectTimeout'));
             return;
           }
           this.ecomet._subsBuffer = this.ecomet._allSubscriptions;

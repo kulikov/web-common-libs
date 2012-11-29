@@ -8,11 +8,12 @@ define [
   class Ecomet
 
     _options:
-      host:              'http://' + window.location.host
-      port:              ''
-      authUrl:           '/auth'
-      bufferTime:        1000
-      maxErrorReconnect: 4
+      host:                'http://' + window.location.host
+      port:                ''
+      authUrl:             '/auth'
+      bufferTime:          1000
+      maxErrorReconnect:   4
+      tryReconnectTimeout: 10000
 
     _subsBuffer:       []
     _bufferTimeout:    null
@@ -130,6 +131,7 @@ define [
         if @_disconnectCnt >= @ecomet._opt 'maxErrorReconnect'
           @ecomet.trigger 'ecomet.connection.error'
           @_isError = true
+          setTimeout (=> @_isError = false; @_reconnect()), @ecomet._opt('tryReconnectTimeout') # попробуем переподключится еще раз через несколько секунд
           return
 
         @ecomet._subsBuffer = @ecomet._allSubscriptions
