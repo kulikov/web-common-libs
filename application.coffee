@@ -79,7 +79,8 @@ define [
 
     # кеш для коллекций
     collection: (collectionClass, params) ->
-      collectionClass.__instance ?= new collectionClass params
+      collectionClass.__instance ?= {}
+      collectionClass.__instance[if params then JSON.stringify(params) else 1] ?= new collectionClass params
 
     # кеш для вьюшек
     view: (viewClass, options) ->

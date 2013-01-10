@@ -94,8 +94,11 @@
       };
 
       Application.prototype.collection = function(collectionClass, params) {
-        var _ref;
-        return (_ref = collectionClass.__instance) != null ? _ref : collectionClass.__instance = new collectionClass(params);
+        var _base, _name, _ref, _ref1;
+        if ((_ref = collectionClass.__instance) == null) {
+          collectionClass.__instance = {};
+        }
+        return (_ref1 = (_base = collectionClass.__instance)[_name = params ? JSON.stringify(params) : 1]) != null ? _ref1 : _base[_name] = new collectionClass(params);
       };
 
       Application.prototype.view = function(viewClass, options) {
