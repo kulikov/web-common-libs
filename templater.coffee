@@ -15,7 +15,7 @@ define [
 
     "date": (time) ->
       d = new Date(time)
-      _round(d.getDate()) + "." + _round(d.getMonth()) + "." + d.getFullYear() + " " + _round(d.getHours()) + ":" + _round(d.getMinutes())
+      _round(d.getDate()) + "." + _round(d.getMonth() + 1) + "." + d.getFullYear() + " " + _round(d.getHours()) + ":" + _round(d.getMinutes())
 
     "time": (time) ->
       d = new Date(time)
