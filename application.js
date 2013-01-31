@@ -46,7 +46,7 @@
     Backbone.Collection.prototype.lazyFetch = function(callback) {
       if (this.models.length) {
         if (callback) {
-          callback();
+          callback(this);
         }
       } else {
         this.fetch({

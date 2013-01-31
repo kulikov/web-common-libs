@@ -41,7 +41,7 @@ define [
   # Ленивая загрузка коллекции
   Backbone.Collection.prototype.lazyFetch = (callback) ->
     if @models.length
-      callback() if callback
+      callback(@) if callback
     else
       @fetch { success: callback, silent: true }
     @
