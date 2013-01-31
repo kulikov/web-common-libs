@@ -22,7 +22,7 @@
       "date": function(time) {
         var d;
         d = new Date(time);
-        return _round(d.getDate()) + "." + _round(d.getMonth()) + "." + d.getFullYear() + " " + _round(d.getHours()) + ":" + _round(d.getMinutes());
+        return _round(d.getDate()) + "." + _round(d.getMonth() + 1) + "." + d.getFullYear() + " " + _round(d.getHours()) + ":" + _round(d.getMinutes());
       },
       "time": function(time) {
         var d;

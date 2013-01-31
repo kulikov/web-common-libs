@@ -35,14 +35,19 @@
         }
       };
 
-      Layout.prototype.show = function(callback) {
+      Layout.prototype.show = function(context, callback) {
         var _this = this;
+        callback = callback || context;
+        if (!_.isFunction(callback)) {
+          callback = null;
+        }
         this.app.currentModule(this.module);
         if (!this._layoutView) {
           this._layoutView = new LayoutView({
             el: this.config("el"),
             template: this.config("template"),
-            app: this.app
+            app: this.app,
+            context: context
           });
         }
         if (this._layoutView.$el.data('layout-id') === this.id) {
@@ -70,7 +75,7 @@
 
       LayoutView.prototype.render = function(action) {
         var _this = this;
-        return this.options.app.template(this.template || this.options.template, function(text) {
+        return this.options.app.template(this.template || this.options.template, this.options.context, function(text) {
           _this.$el.html(text);
           if (action) {
             return action(_this);

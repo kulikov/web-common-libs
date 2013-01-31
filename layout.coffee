@@ -28,7 +28,12 @@ define [
         @_configs = _.extend @_configs || {}, config
 
 
-    show: (callback) ->
+    show: (context, callback) ->
+      callback = callback || context
+
+      if (!_.isFunction(callback))
+        callback = null
+
       @app.currentModule @module
 
       if not @_layoutView
@@ -36,6 +41,7 @@ define [
           el: @config "el"
           template: @config "template"
           app: @app
+          context: context
 
       # чтобы не рендерить лишний раз
       if @_layoutView.$el.data('layout-id') == @id
@@ -52,7 +58,7 @@ define [
   # Вьюшка для лейаута
   class LayoutView extends Backbone.View
     render: (action) ->
-      @options.app.template (@template || @options.template), (text) =>
+      @options.app.template (@template || @options.template), @options.context, (text) =>
         @$el.html text
         action(@) if action
 
