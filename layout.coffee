@@ -16,7 +16,7 @@ define [
 
     constructor: (options = {}) ->
       @_configs = {}
-      @id = _.uniqueId 'layout_'
+      @id = _.uniqueId("layout_")
       _.extend @, options
 
 

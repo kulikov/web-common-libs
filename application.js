@@ -32,10 +32,35 @@
         return this.routerClass = this.app.Backbone.Router.extend(routeParams);
       };
 
+      Module.prototype._eventHandlers = {};
+
+      Module.prototype.on = function(name, callback) {
+        var _base, _ref;
+        if (!_.isFunction(callback)) {
+          return;
+        }
+        if ((_ref = (_base = this._eventHandlers)[name]) == null) {
+          _base[name] = {};
+        }
+        this._eventHandlers[name][callback] = callback;
+        return this;
+      };
+
+      Module.prototype.trigger = function(name, options) {
+        var callback, key, _ref;
+        if (this._eventHandlers[name]) {
+          _ref = this._eventHandlers[name];
+          for (key in _ref) {
+            callback = _ref[key];
+            callback(options);
+          }
+        }
+        return this;
+      };
+
       return Module;
 
     })();
-    _.extend(Module.prototype, Backbone.Events);
     previousGet = Backbone.Model.prototype.get;
     Backbone.Model.prototype.get = function(attr) {
       if (typeof this[attr] === 'function') {

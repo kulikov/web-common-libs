@@ -22,7 +22,7 @@
           options = {};
         }
         this._configs = {};
-        this.id = _.uniqueId('layout_');
+        this.id = _.uniqueId("layout_");
         _.extend(this, options);
       }
 

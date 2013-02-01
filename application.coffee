@@ -23,9 +23,19 @@ define [
     routes: (routeParams) ->
       @routerClass = @app.Backbone.Router.extend routeParams
 
+    _eventHandlers: {}
 
-  # подмешиваем в модуль движок событий
-  _.extend Module::, Backbone.Events
+    on: (name, callback) ->
+      return unless _.isFunction(callback)
+      @_eventHandlers[name] ?= {}
+      @_eventHandlers[name][callback] = callback
+      @
+
+    trigger: (name, options) ->
+      if @_eventHandlers[name]
+        for key, callback of @_eventHandlers[name]
+          callback(options)
+      @
 
 
 
