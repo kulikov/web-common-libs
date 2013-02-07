@@ -46,6 +46,11 @@
         return this;
       };
 
+      Module.prototype.off = function(name) {
+        delete this._eventHandlers[name];
+        return this;
+      };
+
       Module.prototype.trigger = function(name, options) {
         var callback, key, _ref;
         if (this._eventHandlers[name]) {

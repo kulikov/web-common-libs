@@ -31,6 +31,10 @@ define [
       @_eventHandlers[name][callback] = callback
       @
 
+    off: (name) ->
+      delete @_eventHandlers[name]
+      @
+
     trigger: (name, options) ->
       if @_eventHandlers[name]
         for key, callback of @_eventHandlers[name]
