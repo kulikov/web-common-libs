@@ -114,6 +114,7 @@ define [
                 _options = ['<option/>']
                 _collectionFiltered(collection).each (item) ->
                   _options.push "<option value='#{ item.get('id') }'>#{ item.get('fullName') || item.get('name') }</option>"
+
                 _select = $('#' + _uniqId).html(_options.join "")
 
                 if params.selected

@@ -87,7 +87,7 @@ define [
     checkConnect: ->
       return if @_client
 
-      _host   = @ecomet._opt 'host'
+      _host    = @ecomet._opt 'host'
       @_client = new SockJS (if _host.match(/https?:\/\//) then '' else window.location.protocol + '//') + _host + '/ecomet', null, { devel: true, debug: true }
 
 
