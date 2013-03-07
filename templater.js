@@ -66,6 +66,20 @@
         });
       };
 
+      Templater.prototype._retry = function(callback, predicat, timeout) {
+        var _this = this;
+        if (timeout == null) {
+          timeout = 20;
+        }
+        if (!predicat()) {
+          return setTimeout((function() {
+            return _this._retry(callback, predicat, timeout);
+          }), timeout);
+        } else {
+          return callback();
+        }
+      };
+
       Templater.prototype._buildBaseContext = function() {
         var _this = this;
         return dust.makeBase({
@@ -79,27 +93,33 @@
             _viewParams = _this._parseClassPath(params.view);
             _module = _viewParams.module;
             _callback = function(triggerContext) {
-              var _v;
-              params.el = $('#' + _uniqId);
-              if (params["class"]) {
-                $('#' + _uniqId).addClass(params["class"]);
-              }
-              params.context = triggerContext;
-              if ((_v = params.el.data("view"))) {
-                _v._configure(params);
-                _v.setElement('#' + _uniqId);
-                _v.render({
-                  silent: true
+              var _render;
+              _render = function() {
+                var _v;
+                params.el = $('#' + _uniqId);
+                if (params["class"]) {
+                  $('#' + _uniqId).addClass(params["class"]);
+                }
+                params.context = triggerContext;
+                if ((_v = params.el.data("view"))) {
+                  _v._configure(params);
+                  _v.setElement('#' + _uniqId);
+                  _v.render({
+                    silent: true
+                  });
+                  return;
+                }
+                return require(_viewParams.deps, function() {
+                  var view;
+                  view = new _module.Views[_viewParams.name](params);
+                  view.name = _uniqId;
+                  view.setElement('#' + _uniqId);
+                  view.render();
+                  return params.el.data("view", view);
                 });
-                return;
-              }
-              return require(_viewParams.deps, function() {
-                var view;
-                view = new _module.Views[_viewParams.name](params);
-                view.name = _uniqId;
-                view.setElement('#' + _uniqId);
-                view.render();
-                return params.el.data("view", view);
+              };
+              return _this._retry(_render, function() {
+                return $('#' + _uniqId).size();
               });
             };
             if (params.on) {
@@ -138,7 +158,11 @@
                   }
                   return _select.chosen();
                 };
-                return collection.lazyFetch(_render);
+                return collection.lazyFetch(function() {
+                  return _this._retry(_render, function() {
+                    return $('#' + _uniqId).size();
+                  });
+                });
               });
             };
             if (params.on) {

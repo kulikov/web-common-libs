@@ -46,6 +46,13 @@ define [
         callback output, err
 
 
+    _retry: (callback, predicat, timeout = 20) ->
+      if not predicat()
+        setTimeout((=> @_retry(callback, predicat, timeout)), timeout)
+      else
+        callback()
+
+
     _buildBaseContext: =>
       dust.makeBase
 
@@ -63,25 +70,28 @@ define [
           _module = _viewParams.module
 
           _callback = (triggerContext) =>
-            params.el = $('#' + _uniqId)
+            _render = =>
+              params.el = $('#' + _uniqId)
 
-            if params.class
-              $('#' + _uniqId).addClass(params.class)
+              if params.class
+                $('#' + _uniqId).addClass(params.class)
 
-            params.context = triggerContext
+              params.context = triggerContext
 
-            if (_v = params.el.data("view"))
-              _v._configure(params)
-              _v.setElement('#' + _uniqId)
-              _v.render silent: true
-              return
+              if (_v = params.el.data("view"))
+                _v._configure(params)
+                _v.setElement('#' + _uniqId)
+                _v.render silent: true
+                return
 
-            require _viewParams.deps, =>
-              view = new _module.Views[_viewParams.name](params)
-              view.name = _uniqId
-              view.setElement('#' + _uniqId)
-              view.render()
-              params.el.data("view", view)
+              require _viewParams.deps, =>
+                view = new _module.Views[_viewParams.name](params)
+                view.name = _uniqId
+                view.setElement('#' + _uniqId)
+                view.render()
+                params.el.data("view", view)
+
+            @_retry(_render, -> $('#' + _uniqId).size())
 
           if params.on
             _module.off params.on
@@ -107,6 +117,7 @@ define [
 
           _callback = =>
             _collectParams.deps.push "use!chosen"
+
             require _collectParams.deps, =>
               collection = @app.collection _collectParams.module.Collections[_collectParams.name]
 
@@ -115,20 +126,21 @@ define [
                 _collectionFiltered(collection).each (item) ->
                   _options.push "<option value='#{ item.get('id') }'>#{ item.get('fullName') || item.get('name') }</option>"
 
-                _select = $('#' + _uniqId).html(_options.join "")
+                _select = $('#' + _uniqId).html(_options.join(""))
 
                 if params.selected
                   _select.find("option[value=" + (if params.selected.push then params.selected else [params.selected]).join("], option[value=") + "]").attr("selected", true)
 
                 _select.chosen()
 
-              collection.lazyFetch _render
+              collection.lazyFetch =>
+                @_retry(_render, -> $('#' + _uniqId).size())
 
           if params.on
             _collectParams.module.off params.on
             _collectParams.module.on params.on, _callback
           else
-            _.defer _callback
+            _.defer(_callback)
 
 
     _parseClassPath: (path, callback) =>
