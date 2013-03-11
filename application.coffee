@@ -123,14 +123,14 @@ define [
     # Connect to ecomet if not connected
     # Call callback only one times
     #
-    ecometSingle: (name, callback) ->
+    ecometInstance: (name, callback) ->
       callSubs = (ecomet) =>
         if not @_ecometSubscriptions[name]?
           @_ecometSubscriptions[name] = true
           callback(ecomet)
 
       if not @_ecometConnection
-        require ["system/libs/ecomet"], (Ecomet) =>
+        require ["system/libs/ecomet/ecomet"], (Ecomet) =>
           if not @_ecometConnection
             @_ecometConnection = Ecomet.connect
               host:    @config('ecomet.host')

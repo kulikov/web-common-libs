@@ -161,7 +161,7 @@
         }
       };
 
-      Application.prototype.ecometSingle = function(name, callback) {
+      Application.prototype.ecometInstance = function(name, callback) {
         var callSubs,
           _this = this;
         callSubs = function(ecomet) {
@@ -171,7 +171,7 @@
           }
         };
         if (!this._ecometConnection) {
-          return require(["system/libs/ecomet"], function(Ecomet) {
+          return require(["system/libs/ecomet/ecomet"], function(Ecomet) {
             if (!_this._ecometConnection) {
               _this._ecometConnection = Ecomet.connect({
                 host: _this.config('ecomet.host'),
